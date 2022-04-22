@@ -1,10 +1,10 @@
 import { CustomSelect } from "./style"
 
-const Select = ({register,children,course_module}) =>{
+const Select = ({register,children,course_module, title}) =>{
     return(
         
         <CustomSelect>
-            <p>Selecionar módulo</p>
+            <p>{title}</p>
             <select {...register(course_module)}>
             {children}
             </select>

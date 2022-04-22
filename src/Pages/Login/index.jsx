@@ -10,8 +10,9 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import api from '../../Services/api'
 import { toast } from 'react-toastify'
+import { Redirect } from 'react-router-dom'
 
-const Login = () =>{
+const Login = ({authenticated,setAuthenticated}) =>{
 
     const [visible, setVisible] = useState(true)
 
@@ -36,6 +37,7 @@ const Login = () =>{
             toast.success('Login realizado com sucesso')
             localStorage.setItem('@KenzieHub:token',JSON.stringify(response.data.token))
             localStorage.setItem('@KenzieHub:user',JSON.stringify(response.data.user))
+            setAuthenticated(true)
             history.push('/home')
         })
         .catch(err =>{
@@ -49,25 +51,32 @@ const Login = () =>{
 
     return(
         <>
-        <BoxLogo>
-            <img src={logo} alt='logo'/>
-        </BoxLogo>
+        {!authenticated ?
+        <>
+            <BoxLogo>
+                <img src={logo} alt='logo'/>
+            </BoxLogo>
+            
+            <Form onSubmit={handleSubmit(onSubmitFunction)} buttonColor = {true}>
+                <Typography variant='h6' component='h1'>Login</Typography>
+
+                <Input register={register} error={errors.email?.message} name='email' label={'Email'} type={'email'} placeholder='Email'/>
+                <Input register={register} error={errors.password?.message} name='password' label={'Senha'}   type={visible? 'password': 'text'} placeholder='Senha'/>
+                {visible? <AiEye onClick={passwordVisible}/> : <AiEyeInvisible onClick={passwordVisible}/>}
+
+                <Button type='submit'>Entrar</Button>
+
+                <span>Ainda não possui uma conta?</span>
+
+                <div>
+                <Button onClick={backSingup}>Cadastre-se</Button>
+                </div>
+            </Form>
+        </>
+        :
+            <Redirect to="/home"/>
+        }
         
-        <Form onSubmit={handleSubmit(onSubmitFunction)} buttonColor = {true}>
-            <Typography variant='h6' component='h1'>Login</Typography>
-
-            <Input register={register} error={errors.email?.message} name='email' label={'Email'} type={'email'} placeholder='Email'/>
-            <Input register={register} error={errors.password?.message} name='password' label={'Senha'}   type={visible? 'password': 'text'} placeholder='Senha'/>
-            {visible? <AiEye onClick={passwordVisible}/> : <AiEyeInvisible onClick={passwordVisible}/>}
-
-            <Button type='submit'>Entrar</Button>
-
-            <span>Ainda não possui uma conta?</span>
-
-            <div>
-            <Button onClick={backSingup} >Cadastre-se</Button>
-            </div>
-        </Form>
 
         </>
     )

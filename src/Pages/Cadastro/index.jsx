@@ -10,11 +10,12 @@ import { useForm } from "react-hook-form"
 import {yupResolver} from "@hookform/resolvers/yup"
 import { useHistory } from "react-router-dom"
 import { toast } from "react-toastify"
+import { Redirect } from "react-router-dom"
 
 
-const Cadastro = () =>{
+const Cadastro = ({authenticated}) =>{
     const history = useHistory()
-
+    
     const schema = yup.object().shape({
         name: yup.string().required('Campo Obrigatório').trim(),
         email: yup.string().email('Email inválido').required('Campo Obrigatório').trim(),
@@ -43,29 +44,36 @@ const Cadastro = () =>{
 
     return(
         <>
-        <BoxHeader>
-            <img src={logo} alt='logo'/>
-            <Button className='grey' onClick={backLogin}>Voltar</Button>
-        </BoxHeader>
-        <Form onSubmit={handleSubmit(onSubmitFunction)}>
-            <CustomBox>
-                <Typography variant="h6" component={'h1'}>Crie sua conta</Typography>
-                <p>Rapido e grátis, vamos nessa</p>
-            </CustomBox>
+        {!authenticated?
+        <>
+            <BoxHeader>
+                <img src={logo} alt='logo'/>
+                <Button className='grey' onClick={backLogin}>Voltar</Button>
+            </BoxHeader>
+            <Form onSubmit={handleSubmit(onSubmitFunction)}>
+                <CustomBox>
+                    <Typography variant="h6" component={'h1'}>Crie sua conta</Typography>
+                    <p>Rapido e grátis, vamos nessa</p>
+                </CustomBox>
 
-            <Input error={errors.name?.message} register={register} name='name' label={'Nome'} type={'text'} placeholder={'Digite aqui seu nome'}/>
-            <Input error={errors.email?.message} register={register} name='email' label={'Email'} type={'email'} placeholder={'Digite aqui seu email'}/>
-            <Input error={errors.password?.message} register={register} name='password' label={'Senha'} type={'password'} placeholder={'Digite aqui sua senha'}/>
-            <Input error={errors.confirmPassword?.message} register={register} name='confirmPassword' label={'Confirmar Senha'} type={'password'} placeholder={'Digite aqui sua senha'}/> 
-            <Select register={register} course_module='course_module'>
-                <option value='Primeiro módulo (Introdução ao Frontend)'>Primeiro módulo (Introdução ao Frontend)</option> 
-                <option value='Segundo módulo (Frontend Avançado)'>Segundo módulo (Frontend Avançado)</option> 
-                <option value='Terceiro módulo (Introdução ao Backend)'>Terceiro módulo (Introdução ao Backend)</option> 
-                <option value='Quarto módulo (Backend Avançado)'>Quarto módulo (Backend Avançado)</option>
-            </Select>
+                <Input error={errors.name?.message} register={register} name='name' label={'Nome'} type={'text'} placeholder={'Digite aqui seu nome'}/>
+                <Input error={errors.email?.message} register={register} name='email' label={'Email'} type={'email'} placeholder={'Digite aqui seu email'}/>
+                <Input error={errors.password?.message} register={register} name='password' label={'Senha'} type={'password'} placeholder={'Digite aqui sua senha'}/>
+                <Input error={errors.confirmPassword?.message} register={register} name='confirmPassword' label={'Confirmar Senha'} type={'password'} placeholder={'Digite aqui sua senha'}/> 
+                <Select register={register} title={'Selecionar módulo'} course_module='course_module'>
+                    <option value='Primeiro módulo (Introdução ao Frontend)'>Primeiro módulo (Introdução ao Frontend)</option> 
+                    <option value='Segundo módulo (Frontend Avançado)'>Segundo módulo (Frontend Avançado)</option> 
+                    <option value='Terceiro módulo (Introdução ao Backend)'>Terceiro módulo (Introdução ao Backend)</option> 
+                    <option value='Quarto módulo (Backend Avançado)'>Quarto módulo (Backend Avançado)</option>
+                </Select>
 
-            <Button type='submit'>Cadastrar</Button>
-        </Form>
+                <Button type='submit'>Cadastrar</Button>
+            </Form>
+        </>
+        :
+            <Redirect to="/home"/>
+        }
+        
         
         </>
     )
