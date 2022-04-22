@@ -35,6 +35,13 @@ input::placeholder{
  color: var(--grey-1);
 }
 
+input:focus{
+    border-color: ${(props) => (props.error? '#E83F5B' : '#F8F9FA')};
+    ::placeholder{
+        color: var(--grey-0);
+    }
+}
+
 @media (min-width: 728px){
     font-size: 12px;
     margin-bottom: 22px;

@@ -8,9 +8,12 @@ import api from "../../Services/api"
 import * as yup from 'yup'
 import { useForm } from "react-hook-form"
 import {yupResolver} from "@hookform/resolvers/yup"
+import { useHistory } from "react-router-dom"
+import { toast } from "react-toastify"
 
 
 const Cadastro = () =>{
+    const history = useHistory()
 
     const schema = yup.object().shape({
         name: yup.string().required('Campo Obrigatório').trim(),
@@ -23,15 +26,26 @@ const Cadastro = () =>{
         resolver: yupResolver(schema)
     })
 
-    const onSubmitFunction = (data) =>{
-        console.log(data)
+    const onSubmitFunction = ({name, email, password, course_module}) =>{
+        api.post('users', {name, password, email, course_module, bio: ' ', contact: ' '})
+        .then(response =>{
+            toast.success('Conta criada com sucesso!')
+            return history.push('/')
+        })
+        .catch((err) =>{
+            toast.error('Ops! Algo deu errado')
+        })
+    }
+
+    const backLogin = () =>{
+        return history.push('/')
     }
 
     return(
         <>
         <BoxHeader>
             <img src={logo} alt='logo'/>
-            <Button className='grey'>Voltar</Button>
+            <Button className='grey' onClick={backLogin}>Voltar</Button>
         </BoxHeader>
         <Form onSubmit={handleSubmit(onSubmitFunction)}>
             <CustomBox>
