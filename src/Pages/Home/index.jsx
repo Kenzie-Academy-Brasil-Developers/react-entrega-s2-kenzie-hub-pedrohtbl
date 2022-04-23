@@ -1,4 +1,4 @@
-import { AddTech, Content, EmptyTech, Header, Nav, Tecnologias } from "./style"
+import { AddTech, Content, EmptyTech, Header, Nav, Tecnologias, ModalEdit} from "./style"
 import logo from "../../assets/logo.svg"
 import Button from "../../components/Button"
 import { useEffect, useState } from "react"
@@ -23,6 +23,12 @@ const Home = ({authenticated,setAuthenticated}) =>{
 
     const [openModal, setOpenModal] = useState(false)
 
+    const [openModalEdit, setOpenModalEdit] = useState(false)
+
+    const [inputValue, setInputValue] = useState('')
+
+    const [techId, setTechId] = useState('')
+
     useEffect(()=>{
         !!user&&
         api.get(`/users/${user.id}`)
@@ -30,7 +36,6 @@ const Home = ({authenticated,setAuthenticated}) =>{
 
     },[techs])
 
-    
 
     const schema = yup.object().shape({
         title: yup.string().required('Preencha o Campo').trim()
@@ -65,6 +70,37 @@ const Home = ({authenticated,setAuthenticated}) =>{
         e.target.reset()  
     }
 
+    const defaultValue = (event) =>{
+        setOpenModalEdit(true) 
+        const tech = techs.find(tech => tech.id === event.target.id)
+        tech&&setTechId(tech.id)
+        setInputValue(tech.title)
+    }
+
+    const editTech = ({status}) =>{
+        api.put(`/users/techs/${techId}`,{status: `${status}`},{
+            headers:{
+                Authorization: `Bearer ${token}` 
+            }
+        })
+        .then(response => {
+            toast.success('Nivel atualizado!')
+            setOpenModalEdit(false)
+        })
+    }
+
+    const deleteTech = () =>{
+        api.delete(`users/techs/${techId}`,{
+            headers:{
+                Authorization: `Bearer ${token}` 
+            }
+        })
+        .then(response => {
+            toast.success('Tecnologia excluida')
+            setOpenModalEdit(false)
+        })
+    }
+
     return(
         <>
             {authenticated ? 
@@ -86,6 +122,36 @@ const Home = ({authenticated,setAuthenticated}) =>{
                     </form>
                 </Modal>
 
+                    <Modal
+                    title={'Tecnologia Detalhes'}
+                    open={openModalEdit}
+                    onClose={()=> setOpenModalEdit(false)}
+                    close = {setOpenModalEdit}
+                    closeAfterTransition
+                    >
+                        <form onSubmit={handleSubmit(editTech)}>
+    
+                        <Input 
+                        defaultValue = {inputValue}
+                        label={'Nome do projeto'} 
+                        register={register} 
+                        error={errors.title?.message} 
+                        type='text' 
+                        name='title' 
+                        placeholder='Digite o nome da tecnologia'/>
+    
+                        <Select title={'Selecionar Status'} course_module="status" register={register}>
+                            <option>Iniciante</option>
+                            <option>Intermediário</option>
+                            <option>Avançado</option>
+                        </Select>
+                        <div>
+                            <Button type='submit'>Salvar Alterações</Button>
+                            <Button onClick={deleteTech}>Excluir</Button>
+                        </div>
+                        </form>
+                    </Modal>
+
                 <Nav>
                     <img alt="logo" src={logo}/>
                      <Button onClick={logout}>Sair</Button>
@@ -101,7 +167,7 @@ const Home = ({authenticated,setAuthenticated}) =>{
                     </AddTech>
                     <Tecnologias>
                          {!!techs.length?
-                         techs.map(({id,title,status}) => <Card key={id} title={title} status={status}/>)
+                         techs.map(({id,title,status}) => <Card key={id} id={id} title={title} status={status} onClick={defaultValue}/>)
                          :
                          <EmptyTech>
                              <h1>Você não cadastrou nenhuma tecnologia</h1>

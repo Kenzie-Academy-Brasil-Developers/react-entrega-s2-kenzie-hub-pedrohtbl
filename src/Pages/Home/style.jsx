@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { Dialog, Modal, Skeleton } from "@mui/material";
+import { CustomModal } from "../../components/Modal/style";
 
 export const Nav = styled.nav`
 

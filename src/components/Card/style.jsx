@@ -10,6 +10,7 @@ export const CustomCard = styled.li`
     background-color: var(--grey-4);
     margin-top: 16px;
     border-radius: 4px;
+    cursor: pointer;
 
     :hover{
         background-color: var(--grey-2);

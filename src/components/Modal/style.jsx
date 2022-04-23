@@ -50,6 +50,25 @@ export const CustomModal = styled(Dialog)`
         font-size: 12px;
     }
 
+    .MuiDialog-paper>form>div>button:nth-of-type(2){
+            width: 78px;
+            margin-left: 15px;
+        }
+
+        .MuiDialog-paper>form>div>button:nth-of-type(1){
+            width: 160px;
+            font-size: 11px;
+        }
+
+        .MuiDialog-paper>form>div>button:nth-of-type(2){
+            background-color: var(--grey-1);
+            font-size: 12px;
+        }
+
+        .MuiDialog-paper>form>div>button:nth-of-type(2):hover{
+            background-color: var(--grey-2);
+        }
+
     @media (min-width: 728px){
         .MuiDialog-paper{
             width: 369px;
@@ -71,6 +90,18 @@ export const CustomModal = styled(Dialog)`
         form>button{
             font-size: 16px;
         }
+
+        .MuiDialog-paper>form>div>button:nth-of-type(2){
+            width: 98px;
+            margin-left: 15px;
+            font-size: 14px;
+        }
+
+        .MuiDialog-paper>form>div>button:nth-of-type(1){
+            width: 204px;
+            font-size: 14px;
+        }
+
     }
 
 `
