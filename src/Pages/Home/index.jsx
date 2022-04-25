@@ -111,7 +111,7 @@ const Home = ({authenticated,setAuthenticated}) =>{
                 close = {setOpenModal}
                 >
                     <form onSubmit={handleSubmit(onSubmitModal)}>
-                    <Input value='' label={'Nome'} register={register} error={errors.title?.message} type='text' name='title' placeholder='Digite o nome da tecnologia'/>
+                    <Input label={'Nome'} register={register} error={errors.title?.message} type='text' name='title' placeholder='Digite o nome da tecnologia'/>
                     <Select title={'Selecionar Status'} course_module="status" register={register}>
                         <option value={'Iniciante'}>Iniciante</option>
                         <option value={'Intermediário'}>Intermediário</option>
