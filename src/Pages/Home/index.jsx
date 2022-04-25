@@ -70,11 +70,10 @@ const Home = ({authenticated,setAuthenticated}) =>{
         e.target.reset()  
     }
 
-    const defaultValue = (event) =>{
+    const defaultValue = (title,id,status) =>{
         setOpenModalEdit(true) 
-        const tech = techs.find(tech => tech.id === event.target.id)
-        tech&&setTechId(tech.id)
-        setInputValue(tech.title)
+        setTechId(id)
+        setInputValue(title)
     }
 
     const editTech = ({status}) =>{
@@ -112,11 +111,11 @@ const Home = ({authenticated,setAuthenticated}) =>{
                 close = {setOpenModal}
                 >
                     <form onSubmit={handleSubmit(onSubmitModal)}>
-                    <Input label={'Nome'} register={register} error={errors.title?.message} type='text' name='title' placeholder='Digite o nome da tecnologia'/>
+                    <Input value='' label={'Nome'} register={register} error={errors.title?.message} type='text' name='title' placeholder='Digite o nome da tecnologia'/>
                     <Select title={'Selecionar Status'} course_module="status" register={register}>
-                        <option>Iniciante</option>
-                        <option>Intermediário</option>
-                        <option>Avançado</option>
+                        <option value={'Iniciante'}>Iniciante</option>
+                        <option value={'Intermediário'}>Intermediário</option>
+                        <option value={'Avançado'}>Avançado</option>
                     </Select>
                     <Button type='submit'>Cadastrar Tecnologia</Button>
                     </form>
@@ -127,23 +126,22 @@ const Home = ({authenticated,setAuthenticated}) =>{
                     open={openModalEdit}
                     onClose={()=> setOpenModalEdit(false)}
                     close = {setOpenModalEdit}
-                    closeAfterTransition
                     >
                         <form onSubmit={handleSubmit(editTech)}>
     
                         <Input 
-                        defaultValue = {inputValue}
+                        value={inputValue}
+                        error={errors.title?.message}
                         label={'Nome do projeto'} 
-                        register={register} 
-                        error={errors.title?.message} 
+                        register={register}  
                         type='text' 
                         name='title' 
                         placeholder='Digite o nome da tecnologia'/>
     
                         <Select title={'Selecionar Status'} course_module="status" register={register}>
-                            <option>Iniciante</option>
-                            <option>Intermediário</option>
-                            <option>Avançado</option>
+                            <option value={'Iniciante'}>Iniciante</option>
+                            <option value={'Intermediário'}>Intermediário</option>
+                            <option value={'Avançado'}>Avançado</option>
                         </Select>
                         <div>
                             <Button type='submit'>Salvar Alterações</Button>
@@ -167,7 +165,7 @@ const Home = ({authenticated,setAuthenticated}) =>{
                     </AddTech>
                     <Tecnologias>
                          {!!techs.length?
-                         techs.map(({id,title,status}) => <Card key={id} id={id} title={title} status={status} onClick={defaultValue}/>)
+                         techs.map(({id,title,status}) => <Card key={id} id={id} title={title} status={status} onClick={()=> defaultValue(title,id,status)}/>)
                          :
                          <EmptyTech>
                              <h1>Você não cadastrou nenhuma tecnologia</h1>
